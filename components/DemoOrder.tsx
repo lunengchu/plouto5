@@ -42,8 +42,6 @@ const DemoOrder: React.FC = () => {
   const handleSave = () => {
     setStatus('saving');
     setSavingStep(0);
-    
-    // Simulate step-by-step progress
     const interval = setInterval(() => {
       setSavingStep(prev => {
         if (prev >= steps.length - 1) {
@@ -55,7 +53,6 @@ const DemoOrder: React.FC = () => {
     }, 800);
 
     setTimeout(() => {
-      // Simulate random outcome
       if (Math.random() > 0.2) {
         setStatus('success');
       } else {
@@ -75,22 +72,22 @@ const DemoOrder: React.FC = () => {
 
   if (status === 'success') {
     return (
-      <div className="h-full flex flex-col items-center justify-center p-12 text-center animate-in zoom-in duration-700">
-        <div className="w-24 h-24 bg-emerald-50 rounded-[2rem] flex items-center justify-center mb-8 shadow-lg shadow-emerald-100 ring-4 ring-emerald-500/10">
-          <CheckCircle2 className="w-12 h-12 text-emerald-500" />
+      <div className="h-full flex flex-col items-center justify-center p-6 lg:p-12 text-center animate-in zoom-in duration-700">
+        <div className="w-20 h-20 lg:w-24 lg:h-24 bg-emerald-50 rounded-[1.5rem] lg:rounded-[2rem] flex items-center justify-center mb-6 lg:mb-8 shadow-lg shadow-emerald-100 ring-4 ring-emerald-500/10">
+          <CheckCircle2 className="w-10 h-10 lg:w-12 lg:h-12 text-emerald-500" />
         </div>
-        <h2 className="text-4xl font-black text-slate-900 mb-2 tracking-tight">Order Confirmed!</h2>
-        <p className="text-slate-500 max-w-md mx-auto mb-12 font-medium">
-          Order <span className="text-slate-900 font-black">#ORD-2023-99102</span> has been processed and sent to the fulfillment queue.
+        <h2 className="text-2xl lg:text-4xl font-black text-slate-900 mb-2 tracking-tight">Order Confirmed!</h2>
+        <p className="text-sm lg:text-base text-slate-500 max-w-md mx-auto mb-8 lg:mb-12 font-medium">
+          Order <span className="text-slate-900 font-black">#ORD-2023-99102</span> has been processed successfully.
         </p>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 w-full sm:w-auto">
           <button 
             onClick={() => setStatus('idle')}
-            className="px-8 py-4 bg-white border border-slate-200 text-slate-700 font-black rounded-2xl hover:bg-slate-50 transition-all shadow-sm"
+            className="px-8 py-3 lg:py-4 bg-white border border-slate-200 text-slate-700 font-black rounded-xl lg:rounded-2xl hover:bg-slate-50 transition-all shadow-sm order-2 sm:order-1"
           >
             Create New Order
           </button>
-          <button className="px-8 py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all">
+          <button className="px-8 py-3 lg:py-4 bg-indigo-600 text-white font-black rounded-xl lg:rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all order-1 sm:order-2">
             View Details
           </button>
         </div>
@@ -99,28 +96,27 @@ const DemoOrder: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-24 relative">
-      {/* Saving Overlay */}
+    <div className="max-w-6xl mx-auto space-y-6 lg:space-y-8 pb-24 relative">
       {status === 'saving' && (
-        <div className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center p-8 animate-in fade-in duration-300">
-          <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.2)] border border-slate-100 p-10 text-center">
-            <div className="mb-8 flex flex-col items-center">
-              <div className="w-20 h-20 rounded-full border-4 border-slate-50 border-t-indigo-600 animate-spin mb-6"></div>
-              <h3 className="text-2xl font-black text-slate-900 mb-2">Processing Order</h3>
-              <p className="text-slate-400 font-medium text-sm">Please do not refresh the gateway hub.</p>
+        <div className="fixed inset-0 z-[100] bg-white/60 backdrop-blur-md flex items-center justify-center p-4 lg:p-8 animate-in fade-in duration-300">
+          <div className="w-full max-w-md bg-white rounded-[2rem] lg:rounded-[2.5rem] shadow-2xl border border-slate-100 p-8 lg:p-10 text-center">
+            <div className="mb-6 lg:mb-8 flex flex-col items-center">
+              <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full border-4 border-slate-50 border-t-indigo-600 animate-spin mb-4 lg:mb-6"></div>
+              <h3 className="text-xl lg:text-2xl font-black text-slate-900 mb-2">Processing Order</h3>
+              <p className="text-slate-400 font-medium text-xs lg:text-sm">Please do not refresh the hub.</p>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3 lg:space-y-4 text-left max-w-[240px] mx-auto">
               {steps.map((text, idx) => (
                 <div key={idx} className={`flex items-center gap-3 transition-all duration-500 ${idx === savingStep ? 'scale-105 opacity-100' : idx < savingStep ? 'opacity-40' : 'opacity-20'}`}>
                   {idx < savingStep ? (
-                    <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
-                        <CheckCircle2 className="w-3 h-3 text-white" />
+                    <div className="w-4 h-4 lg:w-5 lg:h-5 bg-emerald-500 rounded-full flex items-center justify-center shrink-0">
+                        <CheckCircle2 className="w-2.5 h-2.5 lg:w-3 lg:h-3 text-white" />
                     </div>
                   ) : (
-                    <div className={`w-5 h-5 rounded-full border-2 ${idx === savingStep ? 'border-indigo-600 border-t-transparent animate-spin' : 'border-slate-200'}`}></div>
+                    <div className={`w-4 h-4 lg:w-5 lg:h-5 rounded-full border-2 shrink-0 ${idx === savingStep ? 'border-indigo-600 border-t-transparent animate-spin' : 'border-slate-200'}`}></div>
                   )}
-                  <span className={`text-sm font-bold ${idx === savingStep ? 'text-indigo-600' : 'text-slate-600'}`}>{text}</span>
+                  <span className={`text-[11px] lg:text-sm font-bold truncate ${idx === savingStep ? 'text-indigo-600' : 'text-slate-600'}`}>{text}</span>
                 </div>
               ))}
             </div>
@@ -128,152 +124,98 @@ const DemoOrder: React.FC = () => {
         </div>
       )}
 
-      {/* Error State */}
-      {status === 'error' && (
-        <div className="fixed bottom-10 right-10 z-[60] bg-rose-600 text-white p-6 rounded-3xl shadow-2xl flex items-center gap-6 animate-in slide-in-from-right-4">
-          <div className="p-3 bg-white/20 rounded-2xl">
-            <XCircle className="w-8 h-8" />
-          </div>
-          <div>
-            <h4 className="font-black text-lg">Manifest Collision</h4>
-            <p className="text-white/80 text-sm font-medium">Stock levels changed during validation.</p>
-          </div>
-          <button 
-            onClick={() => setStatus('idle')}
-            className="px-6 py-3 bg-white text-rose-600 font-black rounded-xl hover:bg-rose-50 transition-colors"
-          >
-            Retry
-          </button>
-        </div>
-      )}
-
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Generate New Order</h1>
-          <p className="text-slate-500 font-medium">Drafting shipment ORD-2023-99102</p>
+          <h1 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Generate Order</h1>
+          <p className="text-sm lg:text-base text-slate-500 font-medium truncate">Drafting ORD-2023-99102</p>
         </div>
-        <div className="flex gap-4">
-          <button className="px-6 py-3 bg-white border border-slate-200 text-slate-600 font-black rounded-xl hover:bg-slate-50 transition-all">Cancel</button>
+        <div className="flex gap-3">
+          <button className="flex-1 lg:flex-none px-4 lg:px-6 py-2.5 lg:py-3 bg-white border border-slate-200 text-slate-600 font-black rounded-xl hover:bg-slate-50 transition-all text-sm lg:text-base">Cancel</button>
           <button 
             onClick={handleSave}
             disabled={status === 'saving'}
-            className="px-8 py-3 bg-indigo-600 text-white font-black rounded-xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center gap-2"
+            className="flex-1 lg:flex-none px-6 lg:px-8 py-2.5 lg:py-3 bg-indigo-600 text-white font-black rounded-xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 text-sm lg:text-base"
           >
-            <Save className="w-5 h-5" /> Process Order
+            <Save className="w-4 h-4 lg:w-5 lg:h-5" /> Process
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Information */}
-        <div className="lg:col-span-2 space-y-8">
-          <section className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-            <div className="flex items-center gap-3 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="lg:col-span-2 space-y-6 lg:space-y-8">
+          <section className="bg-white rounded-[1.5rem] lg:rounded-[2rem] p-6 lg:p-8 shadow-sm border border-slate-100">
+            <div className="flex items-center gap-3 mb-6 lg:mb-8">
               <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600">
                 <Info className="w-5 h-5" />
               </div>
-              <h2 className="text-lg font-black text-slate-800">Order Manifest Headers</h2>
+              <h2 className="text-base lg:text-lg font-black text-slate-800 uppercase tracking-tight">Order Manifest</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+              <div className="space-y-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Client Entity</label>
                 <div className="relative group">
-                   <select className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white outline-none appearance-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/5 transition-all">
+                   <select className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl lg:rounded-2xl outline-none appearance-none font-bold text-slate-800 text-sm focus:bg-white transition-all">
                       <option>Oceanic Retail Ltd</option>
                       <option>Global Supply Chain Corp</option>
                    </select>
-                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Destination Facility</label>
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Facility</label>
                 <div className="relative group">
-                   <select className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white outline-none appearance-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/5 transition-all">
-                      <option>Chicago Regional DC (US-ORD1)</option>
-                      <option>L.A. Port Annex (US-LAX2)</option>
+                   <select className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl lg:rounded-2xl outline-none appearance-none font-bold text-slate-800 text-sm focus:bg-white transition-all">
+                      <option>Chicago Regional DC</option>
+                      <option>L.A. Port Annex</option>
                    </select>
-                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Incoterms® 2020</label>
-                <div className="relative group">
-                   <select className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white outline-none appearance-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/5 transition-all">
-                      <option>DAP - Delivered at Place</option>
-                      <option>FOB - Free on Board</option>
-                      <option>EXW - Ex Works</option>
-                   </select>
-                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Target Arrival Date</label>
-                <input type="date" className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white outline-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/5 transition-all" defaultValue="2023-12-25" />
               </div>
             </div>
           </section>
 
-          <section className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-            <div className="flex items-center justify-between mb-8">
+          <section className="bg-white rounded-[1.5rem] lg:rounded-[2rem] p-6 lg:p-8 shadow-sm border border-slate-100 overflow-hidden">
+            <div className="flex items-center justify-between mb-6 lg:mb-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600">
                   <Package className="w-5 h-5" />
                 </div>
-                <h2 className="text-lg font-black text-slate-800">Product Line Items</h2>
+                <h2 className="text-base lg:text-lg font-black text-slate-800 uppercase tracking-tight">Line Items</h2>
               </div>
               <button 
                 onClick={addItem}
-                className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-all flex items-center gap-2 text-xs font-black uppercase"
+                className="p-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-all flex items-center gap-2 text-[10px] font-black uppercase"
               >
-                <Plus className="w-4 h-4" /> Add Item
+                <Plus className="w-3.5 h-3.5" /> Add
               </button>
             </div>
 
             <div className="space-y-4">
-               {items.map((item, index) => (
-                 <div key={item.id} className="grid grid-cols-12 gap-4 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all group">
-                    <div className="col-span-3">
-                       <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">SKU Code</label>
-                       <input 
-                         type="text" 
-                         className="w-full bg-transparent outline-none font-bold text-slate-800 text-sm" 
-                         placeholder="SKU-0000" 
-                         defaultValue={item.sku}
-                       />
-                    </div>
-                    <div className="col-span-5">
-                       <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">Description</label>
-                       <input 
-                         type="text" 
-                         className="w-full bg-transparent outline-none font-bold text-slate-800 text-sm" 
-                         placeholder="Item name..." 
-                         defaultValue={item.description}
-                       />
-                    </div>
-                    <div className="col-span-1">
-                       <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">Qty</label>
-                       <input 
-                         type="number" 
-                         className="w-full bg-transparent outline-none font-bold text-slate-800 text-sm" 
-                         defaultValue={item.qty}
-                       />
-                    </div>
-                    <div className="col-span-2">
-                       <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">Unit Price</label>
-                       <div className="flex items-center gap-1 font-bold text-slate-800 text-sm">
-                          <span className="opacity-40">$</span>
-                          <input 
-                            type="number" 
-                            className="w-full bg-transparent outline-none" 
-                            defaultValue={item.price}
-                          />
-                       </div>
-                    </div>
-                    <div className="col-span-1 flex items-end justify-end pb-1">
-                       <button onClick={() => removeItem(item.id)} className="p-2 text-slate-300 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100">
-                          <Trash2 className="w-4 h-4" />
-                       </button>
+               {items.map((item) => (
+                 <div key={item.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all group relative">
+                    <div className="grid grid-cols-2 sm:grid-cols-12 gap-3">
+                        <div className="col-span-2 sm:col-span-3">
+                           <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">SKU</label>
+                           <input type="text" className="w-full bg-transparent outline-none font-bold text-slate-800 text-xs lg:text-sm" placeholder="SKU-0000" defaultValue={item.sku} />
+                        </div>
+                        <div className="col-span-2 sm:col-span-4">
+                           <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">Description</label>
+                           <input type="text" className="w-full bg-transparent outline-none font-bold text-slate-800 text-xs lg:text-sm" placeholder="Item name..." defaultValue={item.description} />
+                        </div>
+                        <div className="col-span-1 sm:col-span-2">
+                           <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">Qty</label>
+                           <input type="number" className="w-full bg-transparent outline-none font-bold text-slate-800 text-xs lg:text-sm" defaultValue={item.qty} />
+                        </div>
+                        <div className="col-span-1 sm:col-span-2">
+                           <label className="text-[9px] font-black text-slate-400 uppercase mb-1 block">Price</label>
+                           <input type="number" className="w-full bg-transparent outline-none font-bold text-slate-800 text-xs lg:text-sm" defaultValue={item.price} />
+                        </div>
+                        <div className="absolute top-2 right-2 sm:relative sm:top-0 sm:right-0 sm:col-span-1 flex items-end justify-end">
+                           <button onClick={() => removeItem(item.id)} className="p-2 text-slate-300 hover:text-rose-500 transition-colors opacity-100 sm:opacity-0 group-hover:opacity-100">
+                              <Trash2 className="w-4 h-4" />
+                           </button>
+                        </div>
                     </div>
                  </div>
                ))}
@@ -281,54 +223,42 @@ const DemoOrder: React.FC = () => {
           </section>
         </div>
 
-        {/* Sidebar Summary */}
-        <div className="space-y-8">
-           <section className="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-slate-200">
-              <h3 className="text-lg font-black mb-8 flex items-center gap-3">
+        <div className="space-y-6 lg:space-y-8">
+           <section className="bg-slate-900 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 text-white shadow-2xl">
+              <h3 className="text-base lg:text-lg font-black mb-6 lg:mb-8 flex items-center gap-3">
                  <DollarSign className="w-5 h-5 text-indigo-400" />
-                 Financial Summary
+                 Summary
               </h3>
               
-              <div className="space-y-6">
+              <div className="space-y-4 lg:space-y-6">
                  <div className="flex justify-between items-center opacity-60">
-                    <span className="text-sm font-medium">Subtotal</span>
-                    <span className="text-sm font-bold">$1,875.00</span>
-                 </div>
-                 <div className="flex justify-between items-center opacity-60">
-                    <span className="text-sm font-medium">Estimated Duties</span>
-                    <span className="text-sm font-bold">$142.30</span>
+                    <span className="text-xs lg:text-sm font-medium">Subtotal</span>
+                    <span className="text-xs lg:text-sm font-bold">$1,875.00</span>
                  </div>
                  <div className="flex justify-between items-center opacity-60">
-                    <span className="text-sm font-medium">Freight Insurance</span>
-                    <span className="text-sm font-bold">$45.00</span>
+                    <span className="text-xs lg:text-sm font-medium">Duty</span>
+                    <span className="text-xs lg:text-sm font-bold">$142.30</span>
                  </div>
-                 <div className="pt-6 border-t border-white/10 flex justify-between items-center">
-                    <span className="text-base font-bold">Total Payable</span>
-                    <span className="text-2xl font-black text-indigo-400">$2,062.30</span>
+                 <div className="pt-4 lg:pt-6 border-t border-white/10 flex justify-between items-center">
+                    <span className="text-sm lg:text-base font-bold">Total</span>
+                    <span className="text-xl lg:text-2xl font-black text-indigo-400">$2,062.30</span>
                  </div>
-              </div>
-
-              <div className="mt-10 bg-white/5 rounded-2xl p-4 border border-white/5 flex items-start gap-3">
-                 <Info className="w-4 h-4 text-white/40 mt-0.5" />
-                 <p className="text-[11px] text-white/50 leading-relaxed">
-                    Financials are calculated based on real-time exchange rates and regional tariff schedules.
-                 </p>
               </div>
            </section>
 
-           <section className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-              <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+           <section className="bg-white rounded-[1.5rem] lg:rounded-[2rem] p-6 lg:p-8 shadow-sm border border-slate-100">
+              <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest mb-4 lg:mb-6 flex items-center gap-2">
                 <FileText className="w-4 h-4 text-indigo-500" />
-                Additional Details
+                Notes
               </h3>
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Client Reference #</label>
-                  <input type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:bg-white font-bold text-xs" defaultValue="PO-9821-X" />
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Reference</label>
+                  <input type="text" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:bg-white font-bold text-xs" defaultValue="PO-9821-X" />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Special Instructions</label>
-                  <textarea className="w-full h-32 px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:bg-white font-bold text-xs resize-none" placeholder="Add handling requirements..."></textarea>
+                  <textarea className="w-full h-24 px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:bg-white font-bold text-xs resize-none" placeholder="Requirements..."></textarea>
                 </div>
               </div>
            </section>

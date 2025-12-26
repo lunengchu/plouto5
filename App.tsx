@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { MOCK_USER, MENU_REGISTRY } from './constants';
-import { User, Workspace, WorkspaceRole, LayoutType, Language } from './types';
+import { User, Workspace, WorkspaceRole, Language } from './types';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
@@ -22,11 +22,15 @@ const App: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState('m0');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Filter root menus based on current workspace role
+  // Close mobile menu when switching routes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [activeMenuId, activeWorkspace, showProfile]);
+
   const filteredMenus = MENU_REGISTRY.filter(menu => menu.roles.includes(activeWorkspace.role));
 
-  // Recursive search for active menu
   const findMenuById = (menus: any[], id: string): any => {
     for (const menu of menus) {
       if (menu.id === id) return menu;
@@ -63,7 +67,6 @@ const App: React.FC = () => {
       );
     }
 
-    // Custom Routing for Demo Components
     if (activeMenuId === 'demo-404') {
       return <NotFound onBack={() => setActiveMenuId('m8')} onHome={() => setActiveMenuId('m0')} />;
     }
@@ -75,16 +78,16 @@ const App: React.FC = () => {
     return (
       <MFEContainer menu={activeMenu}>
         {activeMenuId === 'm0' || activeMenuId === 'm1' ? <Dashboard /> : (
-            <div className="bg-white rounded-[2.5rem] p-16 shadow-sm border border-slate-100 min-h-[500px] flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
-              <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-3xl flex items-center justify-center mb-8">
-                  <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-white rounded-[1.5rem] lg:rounded-[2.5rem] p-8 lg:p-16 shadow-sm border border-slate-100 min-h-[400px] lg:min-h-[500px] flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
+              <div className="w-16 h-16 lg:w-20 lg:h-20 bg-indigo-50 text-indigo-600 rounded-2xl lg:rounded-3xl flex items-center justify-center mb-6 lg:mb-8">
+                  <svg className="w-8 h-8 lg:w-10 lg:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                   </svg>
               </div>
-              <h2 className="text-2xl font-black text-slate-800 mb-3">{activeMenu.title}</h2>
-              <p className="text-base text-slate-500 max-w-sm mb-10 font-medium leading-relaxed">This business logic is encapsulated in the <span className="text-slate-900 font-bold">{activeMenu.mfeId}</span> micro-service container.</p>
-              <button className="px-10 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all active:scale-95 flex items-center gap-3">
-                Launch Remote Instance <ArrowRight className="w-5 h-5" />
+              <h2 className="text-xl lg:text-2xl font-black text-slate-800 mb-2 lg:mb-3">{activeMenu.title}</h2>
+              <p className="text-sm lg:text-base text-slate-500 max-w-sm mb-8 lg:mb-10 font-medium leading-relaxed">This business logic is encapsulated in the <span className="text-slate-900 font-bold">{activeMenu.mfeId}</span> micro-service container.</p>
+              <button className="px-8 lg:px-10 py-3 lg:py-4 bg-indigo-600 text-white font-black rounded-xl lg:rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all active:scale-95 flex items-center gap-3">
+                Launch Remote Instance <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5" />
               </button>
             </div>
         )}
@@ -94,7 +97,13 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50">
-      {layout === 'sidebar' && (
+      {/* Sidebar - Always visible as a drawer on mobile, layout-dependent on desktop */}
+      <div 
+        className={`fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      <div className={`fixed inset-y-0 left-0 z-50 transform lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} ${layout === 'sidebar' ? 'w-72 lg:block' : 'w-72 lg:hidden'}`}>
         <Sidebar 
           currentRole={activeWorkspace.role}
           activeMenuId={activeMenuId}
@@ -103,15 +112,22 @@ const App: React.FC = () => {
               setShowProfile(false);
           }}
           collapsed={sidebarCollapsed}
+          onClose={() => setIsMobileMenuOpen(false)}
         />
-      )}
+      </div>
 
-      <div className="flex-1 flex flex-col relative overflow-hidden">
+      <div className="flex-1 flex flex-col relative overflow-hidden w-full">
         <Header 
           user={currentUser}
           activeWorkspace={activeWorkspace}
           onWorkspaceSwitch={handleWorkspaceSwitch}
-          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onToggleSidebar={() => {
+            if (window.innerWidth < 1024) {
+              setIsMobileMenuOpen(true);
+            } else {
+              setSidebarCollapsed(!sidebarCollapsed);
+            }
+          }}
           onProfileClick={() => setShowProfile(true)}
           onLogout={() => setIsLoggedIn(false)}
           notifications={2}
@@ -126,7 +142,7 @@ const App: React.FC = () => {
           onLanguageChange={setLanguage}
         />
 
-        <main className="flex-1 overflow-y-auto p-8 scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth">
           {renderContent()}
         </main>
       </div>

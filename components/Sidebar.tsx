@@ -2,7 +2,7 @@
 import React from 'react';
 import { MENU_REGISTRY } from '../constants';
 import { WorkspaceRole } from '../types';
-import { Settings } from 'lucide-react';
+import { Settings, X } from 'lucide-react';
 import NavigationItem from './NavigationItem';
 
 interface SidebarProps {
@@ -10,18 +10,27 @@ interface SidebarProps {
   activeMenuId: string;
   onMenuSelect: (id: string) => void;
   collapsed: boolean;
+  onClose?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ currentRole, activeMenuId, onMenuSelect, collapsed }) => {
+const Sidebar: React.FC<SidebarProps> = ({ currentRole, activeMenuId, onMenuSelect, collapsed, onClose }) => {
   const filteredMenus = MENU_REGISTRY.filter(menu => menu.roles.includes(currentRole));
 
   return (
-    <aside className={`bg-white border-r border-slate-200 transition-all duration-300 flex flex-col ${collapsed ? 'w-20' : 'w-64'}`}>
-      <div className="p-6 flex items-center gap-3">
-        <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-200">
-          P5
+    <aside className={`h-full bg-white border-r border-slate-200 transition-all duration-300 flex flex-col ${collapsed ? 'w-20' : 'w-72 lg:w-64'}`}>
+      <div className="p-6 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-200">
+            P5
+          </div>
+          {!collapsed && <span className="font-bold text-xl tracking-tight text-slate-800">Plouto5</span>}
         </div>
-        {!collapsed && <span className="font-bold text-xl tracking-tight text-slate-800">Plouto5</span>}
+        
+        {onClose && (
+          <button onClick={onClose} className="p-2 lg:hidden text-slate-400 hover:text-slate-600">
+            <X className="w-6 h-6" />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
