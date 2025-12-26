@@ -1,0 +1,8 @@
+{
+  "name": "Plouto5 SCM Gateway",
+  "description": "A sophisticated supply chain and order management gateway featuring multi-workspace switching, micro-frontend integration, and advanced logistics tracking.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
