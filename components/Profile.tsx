@@ -15,7 +15,8 @@ import {
   Monitor
 } from 'lucide-react';
 import { User, ActivityLog, Notification, LayoutType } from '../types';
-import { MOCK_ACTIVITY, MOCK_NOTIFICATIONS } from '../constants';
+
+// Removed non-existent MOCK_ACTIVITY and MOCK_NOTIFICATIONS imports from ../constants
 
 interface ProfileProps {
   user: User;

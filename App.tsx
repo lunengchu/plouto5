@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { MOCK_USER, MENU_REGISTRY } from './constants';
 import { User, Workspace, WorkspaceRole, LayoutType, Language } from './types';
 import Sidebar from './components/Sidebar';
@@ -8,6 +9,8 @@ import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Profile from './components/Profile';
 import MFEContainer from './components/MFEContainer';
+import NotFound from './components/NotFound';
+import DemoOrder from './components/DemoOrder';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,6 +52,46 @@ const App: React.FC = () => {
 
   const layout = currentUser.preferredLayout;
 
+  const renderContent = () => {
+    if (showProfile) {
+      return (
+        <Profile 
+          user={currentUser} 
+          onUpdateDefaultWorkspace={(id) => setCurrentUser(prev => ({...prev, defaultWorkspaceId: id}))} 
+          onUpdateLayout={(l) => setCurrentUser(prev => ({...prev, preferredLayout: l}))}
+        />
+      );
+    }
+
+    // Custom Routing for Demo Components
+    if (activeMenuId === 'demo-404') {
+      return <NotFound onBack={() => setActiveMenuId('m8')} onHome={() => setActiveMenuId('m0')} />;
+    }
+
+    if (activeMenuId === 'demo-order') {
+      return <DemoOrder />;
+    }
+
+    return (
+      <MFEContainer menu={activeMenu}>
+        {activeMenuId === 'm0' || activeMenuId === 'm1' ? <Dashboard /> : (
+            <div className="bg-white rounded-[2.5rem] p-16 shadow-sm border border-slate-100 min-h-[500px] flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
+              <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-3xl flex items-center justify-center mb-8">
+                  <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+              </div>
+              <h2 className="text-2xl font-black text-slate-800 mb-3">{activeMenu.title}</h2>
+              <p className="text-base text-slate-500 max-w-sm mb-10 font-medium leading-relaxed">This business logic is encapsulated in the <span className="text-slate-900 font-bold">{activeMenu.mfeId}</span> micro-service container.</p>
+              <button className="px-10 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all active:scale-95 flex items-center gap-3">
+                Launch Remote Instance <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+        )}
+      </MFEContainer>
+    );
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50">
       {layout === 'sidebar' && (
@@ -83,29 +126,8 @@ const App: React.FC = () => {
           onLanguageChange={setLanguage}
         />
 
-        <main className="flex-1 overflow-y-auto p-6 scroll-smooth">
-          {showProfile ? (
-            <Profile 
-              user={currentUser} 
-              onUpdateDefaultWorkspace={(id) => setCurrentUser(prev => ({...prev, defaultWorkspaceId: id}))} 
-              onUpdateLayout={(l) => setCurrentUser(prev => ({...prev, preferredLayout: l}))}
-            />
-          ) : (
-            <MFEContainer menu={activeMenu}>
-              {activeMenuId === 'm0' || activeMenuId === 'm1' ? <Dashboard /> : (
-                  <div className="bg-white rounded-[2rem] p-12 shadow-sm border border-slate-100 min-h-[500px] flex flex-col items-center justify-center text-center">
-                    <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6">
-                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-800 mb-2">{activeMenu.title}</h2>
-                    <p className="text-sm text-slate-500 max-w-sm mb-8">This module is part of the Plouto5 micro-service ecosystem ({activeMenu.mfeId}).</p>
-                    <button className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all">Launch Application</button>
-                  </div>
-              )}
-            </MFEContainer>
-          )}
+        <main className="flex-1 overflow-y-auto p-8 scroll-smooth">
+          {renderContent()}
         </main>
       </div>
     </div>
